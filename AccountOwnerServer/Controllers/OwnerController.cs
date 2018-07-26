@@ -25,7 +25,6 @@ namespace AccountOwnerServer.Controllers
             try
             {
                 var owners = await _repository.Owner.GetAllOwnersAsync();
-
                 return Ok(owners);
             }
             catch (Exception ex)
