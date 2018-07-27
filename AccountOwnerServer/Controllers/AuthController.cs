@@ -24,15 +24,15 @@ namespace AccountOwnerServer.Controllers
                 return BadRequest("Invalid client request");
             }
 
-            if (user.UserName == "johndoe" && user.Password == "def@123")
+            if (user.UserName == "user" && user.Password == "pwd@123")
             {
                 var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtSecurity.Key));
                 var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-
+                var claims = GetClaims(user.UserName);
                 var tokeOptions = new JwtSecurityToken(
                     issuer: "http://localhost:5000",
                     audience: "http://localhost:5000",
-                    claims: new List<Claim>(),
+                    claims: claims,
                     expires: DateTime.Now.AddMinutes(5),
                     signingCredentials: signinCredentials
                 );
@@ -42,6 +42,18 @@ namespace AccountOwnerServer.Controllers
             }
 
             return Unauthorized();
+        }
+
+        private IList<Claim> GetClaims(string userName)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, userName),
+                new Claim(ClaimTypes.Role, "Manager"),
+                new Claim(ClaimTypes.Role, "Operator")
+            };
+
+            return claims;
         }
     }
 }

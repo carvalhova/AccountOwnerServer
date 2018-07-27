@@ -22,7 +22,6 @@ namespace AccountOwnerServer.Controllers
             _repository = repository;
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAllOwners()
         {

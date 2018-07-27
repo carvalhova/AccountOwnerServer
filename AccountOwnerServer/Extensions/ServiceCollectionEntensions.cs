@@ -97,7 +97,7 @@ namespace AccountOwnerServer.Extensions
                 o.AddPolicy("api-policy", b =>
                 {
                     b.RequireAuthenticatedUser();
-                    b.RequireClaim(ClaimTypes.Role, "Access.Api");
+                    //b.RequireClaim(ClaimTypes.Role, "Access.Api");
                     b.AuthenticationSchemes = new List<string> { JwtBearerDefaults.AuthenticationScheme };
                 });
             });
