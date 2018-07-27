@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AccountOwnerServer.Infra;
 using Contracts;
 using Entities.Extensions;
 using Entities.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AccountOwnerServer.Controllers
 {
-    [Route("api/owner")]
+    //[Route("api/owner")]
+    [Route(Routes.ApiController)]
     public class OwnerController : Controller
     {
         private readonly ILoggerManager _logger;
@@ -19,6 +22,7 @@ namespace AccountOwnerServer.Controllers
             _repository = repository;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAllOwners()
         {

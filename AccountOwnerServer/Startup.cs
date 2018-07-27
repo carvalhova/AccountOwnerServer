@@ -1,12 +1,15 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Security.Claims;
 using AccountOwnerServer.Extensions;
+using AccountOwnerServer.Infra.Filters;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using NLog;
 
 namespace AccountOwnerServer
@@ -32,13 +35,15 @@ namespace AccountOwnerServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureLoggerService();
+            services.ConfigureFilters();
             services.ConfigureCors();
             services.ConfigureIISIntegration();
             services.ConfigureSqlServerDbContext(Configuration);
             services.ConfigureRepositoryWrapper();
+            services.ConfigureJwt();
 
-            services.AddMvc()
-                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(options => { options.Conventions.Add(new AddAuthorizeFiltersControllerConvention()); })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,8 +57,6 @@ namespace AccountOwnerServer
             {
                 app.UseHsts();
             }
-
-            app.UseCors("CorsPolicy");
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
@@ -72,6 +75,8 @@ namespace AccountOwnerServer
                 }
             });
 
+            app.UseAuthentication();
+            app.UseCors("CorsPolicy");
             app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseMvc();

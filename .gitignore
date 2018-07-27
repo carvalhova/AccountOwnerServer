@@ -14,3 +14,5 @@
 /LoggerService/bin/
 /Repository/obj/
 /Repository/bin/
+/AccountOwnerServer/wwwroot/AccountOwnerClient
+/AccountOwnerServer/Properties/PublishProfiles
