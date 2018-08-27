@@ -4,11 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities.Models
 {
-    [Table("Owner")]
-    public class Owner : IEntity
+    [Table("Customer")]
+    public class Customer : IEntity
     {
         [Key]
-        [Column("OwnerId")]
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Name is required")]

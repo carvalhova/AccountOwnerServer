@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Security.Claims;
+﻿using System.IO;
 using AccountOwnerServer.Extensions;
 using AccountOwnerServer.Infra.Filters;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -30,6 +27,7 @@ namespace AccountOwnerServer
         }
 
         public IConfiguration Configuration { get; }
+        public IServiceCollection Services { get; private set;}
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -44,6 +42,8 @@ namespace AccountOwnerServer
 
             services.AddMvc(options => { options.Conventions.Add(new AddAuthorizeFiltersControllerConvention()); })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            Services = services;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +52,8 @@ namespace AccountOwnerServer
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.ListAllRegisteredServices(Services);
+                app.UseDatabaseErrorPage();
             }
             else
             {

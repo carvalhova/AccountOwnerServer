@@ -10,7 +10,11 @@ namespace Entities
         {
         }
 
-        public DbSet<Owner> Owners { get; set; }
+        public DbSet<Customer> Customers { get; set; }
         public DbSet<Account> Accounts { get; set; }
+        public DbSet<Company> Companies { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Product> Products { get; set; }
+
     }
 }
